@@ -139,3 +139,185 @@ s.sort_index()     #按索引排序
 s.sort_values()    #按值排序
 ```
 
+## DataFrame-------二维数据
+
+## DataFrame的创建方式
+
+```python
+import pandas as pd
+import numpy as np
+
+#通过series创建
+s1 = pd.Series([1,2,3,4,5])
+s2 = pd.Series([6,7,8,9,10])
+df = pd.DataFrame({"第1列":s1,"第2列":s2})
+
+#通过字典创建
+df = pd.DataFrame(
+    {
+        "id":[1,2,3,4,5],
+        "name":["tom","jack","alice","bob","allen"],
+        "age":[15,17,28,26,38],
+        "score":[60.5,80,30.6,70,83.5]
+    },index=[1,2,3,4,5],columns=["name","age","score"] #列名，修改时可直接在这里改
+)
+df
+```
+
+## 属性
+
+<img src="C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20260211204936209.png" alt="image-20260211204936209" style="zoom:80%;" />
+
+```python
+#dataframe的属性
+print('行索引')
+print(df.index)
+print('列标签')
+print(df.columns)
+print('值')
+print(df.values)
+```
+
+```python
+print('维度:',df.ndim)
+print('形状:',df.shape)
+print('元素个数:'df.size)
+print('数据类型:')
+print(df.dtypes)
+```
+
+```python
+#行列转置
+print(df.T)
+print(df.T.index)
+```
+
+```python
+#获取元素
+#某行
+print(df.loc[4])
+print(df.iloc[3])#隐式索引
+
+#某列
+print(df.loc[:,'name'])
+print(df.iloc[:,0])#行用：
+
+#单个元素
+print(df.at[3,'score'])
+print(df.iat[2,1])
+print(df.loc[3,'score'])
+print(df.iloc[2,1])
+
+#获取单列数据
+print(df['name'])#series
+print(df.name)#series
+print(df[['name']])#dataframe
+
+#获取多列数据
+print(df[['name','score']])
+
+```
+
+```python
+#查看部分数据
+print(df.head(2))
+print(df.tail(3))
+```
+
+```python
+#数据筛选 
+#使用布尔数据进行筛选
+df[df.score>70]
+
+df[(df.score>70)&(df.age<20)]
+df[(df['score']>70)&(df.age<20)]
+
+
+#随机抽样
+df.sample(3)#从原来数据中随机取3条数据
+
+```
+
+
+
+## 常用方法
+
+<img src="C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20260211212830688.png" alt="image-20260211212830688" style="zoom:80%;" />
+
+```python
+df = pd.DataFrame(
+    {
+        "id":[1,2,3,4,5,6],
+        "name":["tom","tom","jack","alice","bob","allen"],
+        "age":[15,15,15,20,26,38],
+        "score":[60.5,60.5,80,30.6,70,83.5]
+    },index=[1,2,3,4,5,6],columns=["name","age","score"] #列名，修改时可直接在这里改
+)
+```
+
+```python
+print(df.isin(['jack',20]))  #查看元素是否包含在参数集合中
+```
+
+```python
+print(df.isna()) #查看元素是否有缺失值
+```
+
+```python
+print(df['score'].sum())
+print(df.score.max())
+print(df.age.min())
+print(df['score'].mean())
+print(df['score'].median())
+print(df['score'].mode())
+print(df['score'].std())
+print(df['score'].var())
+print(df.score.quantile(0.25))
+
+df.cumsum() #累加和
+df.cummax() #累计最大，默认按列，按行：axis=1
+
+df.nlargest(2,columns=['score','age']) #求最大值：获取几个数据，取哪几列
+df.nsmallest(2,columns=['score','age']) #求最小值：获取几个数据，取哪几列
+```
+
+```python
+print(df.describe())
+```
+
+```python
+print(df.count())
+
+print(df.value_counts()) #出现的次数
+```
+
+```python
+print(df.drop_duplicates())
+
+print(df.duplicated(subset=['age']))
+```
+
+```python
+print(df.replace(15,30)) #15替换为30
+```
+
+```python
+#排序
+print(df.sort_index(ascending=False))#按索引排序
+
+print(df.sort_values(by='score'))
+
+
+df = pd.DataFrame(
+    {
+        "id":[1,2,3,4,5,6],
+        "name":["tom","tom","jack","alice","bob","allen"],
+        "age":[15,15,15,20,26,38],
+        "score":[60.5,60.5,80,30.6,70,80]
+    },index=[1,2,3,4,5,6],columns=["name","age","score"] #列名，修改时可直接在这里改
+)
+
+#多列排序
+print(df.sort_values(by=['score','age'],ascending=[True,False]))
+```
+
